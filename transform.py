@@ -74,7 +74,8 @@ df = pd.concat([
 ], axis=1)
 # vamos remover as colunas que passaram pelo processo de dummie
 df = df.drop([
-    'loja', 
+    'loja',
+    'faturamento_ultimo_ano',
     'canal', 
     'localizacao', 
     'modelo_arquitetonico', 
