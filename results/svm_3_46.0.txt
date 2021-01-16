@@ -1,0 +1,10 @@
+              precision    recall  f1-score   support
+
+      BRONZE       0.70      0.92      0.79       273
+    DIAMANTE       0.35      0.06      0.10       279
+        OURO       0.36      0.54      0.43       265
+       PRATA       0.31      0.33      0.32       259
+
+    accuracy                           0.46      1076
+   macro avg       0.43      0.46      0.41      1076
+weighted avg       0.43      0.46      0.41      1076

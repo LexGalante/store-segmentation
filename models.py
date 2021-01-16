@@ -70,7 +70,7 @@ models = {
     # xgboost
     'x_boost_1': GradientBoostingClassifier(),
     'x_boost_2': GradientBoostingClassifier(
-        n_estimators=10000,
+        n_estimators=300,
     ),
     # redes baysianas
     'naive_bayes_1': GaussianNB(),
@@ -84,7 +84,8 @@ models = {
         kernel='sigmoid',
     ),
     # rede neural
-    'neural_network_1': MLPClassifier(
+    'neural_network_1': MLPClassifier(),
+    'neural_network_2': MLPClassifier(
         activation='relu',
         solver='adam',
         learning_rate='constant',
@@ -99,7 +100,6 @@ for index, (name, model) in enumerate(models.items()):
         print(f"{index} - Training model {name} ...")
         model.fit(X_train, Y_train)
         predicts = model.predict(x_test)
-        probabilities = model.predict_proba(x_test)
         accuracy = round(accuracy_score(y_test, predicts) * 100, 2)
         print(f"{index} - Model {name} trained, accuracy {accuracy}")
         results[name] = {
