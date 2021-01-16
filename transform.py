@@ -3,7 +3,7 @@
 import numpy as np
 import pandas as pd
 
-from utils.helpers import handle_boolean
+from utils.helpers import handle_boolean, handle_nan_float, handle_number_of_employees
 
 # importando os dados do dataset
 df = pd.read_csv('stores.csv', sep=',')
@@ -72,6 +72,19 @@ df = pd.concat([
     df_faturamento_ultimo_ano,
     df_maturidade_processo
 ], axis=1)
+# agora vamos tratar os nulos
+# no caso da regiao como temos pouco valores nulos vamos optar pelo metodo ffill
+# veja mais detalhes em https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.fillna.html
+df['regiao'] = df['regiao'].fillna(method='ffill')
+# para o aporte_inicial vamos considerar 0
+df['aporte_inicial'] = df['aporte_inicial'].apply(handle_nan_float)
+# para o numero de empregados vamos considerar a média do clube que ele pertence
+# print(df.groupby('club').mean()['numero_empregados'])
+# BRONZE      18.617430
+# DIAMANTE    18.854103
+# OURO        11.478423
+# PRATA        6.571642
+df['numero_empregados'] = df[['numero_empregados', 'club']].apply(handle_number_of_employees, axis=1)
 # vamos remover as colunas que passaram pelo processo de dummie
 df = df.drop([
     'loja',
@@ -82,3 +95,5 @@ df = df.drop([
     'faturamento_ultimo_ano', 
     'maturidade_processo'
 ], axis=1)
+# agora vamos salvar nosso dataframe final para construcao dos modelos
+df.to_csv('data.csv')
