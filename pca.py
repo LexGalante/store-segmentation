@@ -5,7 +5,7 @@ from sklearn.decomposition import PCA
 df = pd.read_csv('data.csv')
 
 pca = PCA(n_components=2)
-pca_components = pca.fit_transform(df[])
+pca_components = pca.fit_transform(df.drop('club', axis=1))
 pca_df = pd.DataFrame(
     data=pca_components, 
     columns=['principal component 1', 'principal component 2']
