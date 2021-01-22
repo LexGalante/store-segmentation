@@ -18,7 +18,6 @@ df = pd.read_csv('data.csv')
 X = df.drop('club', axis=1)
 Y = df['club']
 X_train, x_test, Y_train, y_test = train_test_split(X, Y, test_size=0.2)
-# criação dos modelos de regressão logistica
 # aqui estamos experimentando várias parametrizacões
 models = {
     # regressão logistica
@@ -107,12 +106,17 @@ for index, (name, model) in enumerate(models.items()):
             'confusion_matrix': confusion_matrix(y_test, predicts),
             'classification_report': classification_report(y_test, predicts),
         }
+        print(name)
+        print(results[name]['confusion_matrix'])
         print(f"{index} - Dumping model {name} ...")
         dump(model, f"./dumps/{name}.joblib")
         print(f"{index} - Saving model {name} ...")
+        
         with open(f"./results/{name}_{results[name]['accuracy_score']}.txt", 'w') as file:
             file.write(results[name]['classification_report'])
     except Exception as e:
         print(f"Error on trying to training model {name}: {str(e)}")
+
+
 
 
