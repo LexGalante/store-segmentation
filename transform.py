@@ -63,6 +63,16 @@ df_maturidade_processo = df_maturidade_processo.rename(columns={
     'BAIXA': 'maturidade_baixa',
     'INEXISTENTE': 'maturidade_inexistente',
 })
+df['regiao'] = df['regiao'].fillna(method='ffill')
+df_regiao = pd.get_dummies(df['regiao'])
+df_regiao = df_regiao.rename(columns={
+    1: 'regiao_1',
+    2: 'regiao_2',
+    3: 'regiao_3',
+    4: 'regiao_4',
+    5: 'regiao_5',
+    6: 'regiao_6',
+})
 # agora vamos colocar estas novas colunas no dataframe final
 df = pd.concat([
     df,
@@ -70,12 +80,12 @@ df = pd.concat([
     df_localizacao,
     df_modelo_arquitetonico,
     df_faturamento_ultimo_ano,
-    df_maturidade_processo
+    df_maturidade_processo,
+    df_regiao
 ], axis=1)
 # agora vamos tratar os nulos
 # no caso da regiao como temos pouco valores nulos vamos optar pelo metodo ffill
 # veja mais detalhes em https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.fillna.html
-df['regiao'] = df['regiao'].fillna(method='ffill')
 # para o aporte_inicial vamos considerar 0
 df['aporte_inicial'] = df['aporte_inicial'].apply(handle_nan_float)
 # para o numero de empregados vamos considerar a média do clube que ele pertence
@@ -93,7 +103,8 @@ df = df.drop([
     'localizacao', 
     'modelo_arquitetonico', 
     'faturamento_ultimo_ano', 
-    'maturidade_processo'
+    'maturidade_processo',
+    'regiao',
 ], axis=1)
 # agora vamos salvar nosso dataframe final para construcao dos modelos
 df.to_csv('data.csv')

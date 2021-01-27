@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
+import os
 import numpy as np
 import pandas as pd
+from shutil import rmtree
 from sklearn.linear_model import LogisticRegression, LogisticRegressionCV
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
@@ -93,6 +95,10 @@ models = {
     )
 }
 results = {}
+if os.path.exists('./results'):
+    rmtree('./results')
+    
+os.mkdir('./results')
 # predições
 for index, (name, model) in enumerate(models.items()):
     try:
@@ -111,7 +117,6 @@ for index, (name, model) in enumerate(models.items()):
         print(f"{index} - Dumping model {name} ...")
         dump(model, f"./dumps/{name}.joblib")
         print(f"{index} - Saving model {name} ...")
-        
         with open(f"./results/{name}_{results[name]['accuracy_score']}.txt", 'w') as file:
             file.write(results[name]['classification_report'])
     except Exception as e:
