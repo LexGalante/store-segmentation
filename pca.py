@@ -2,12 +2,20 @@
 import pandas as pd
 from sklearn.decomposition import PCA
 
-df = pd.read_csv('data.csv')
+# importando os dados do dataset
+df = pd.read_csv('data.csv', sep=',')
 
-pca = PCA(n_components=2)
+pca = PCA(n_components=5)
 pca_components = pca.fit_transform(df.drop('club', axis=1))
 pca_df = pd.DataFrame(
     data=pca_components, 
-    columns=['principal component 1', 'principal component 2']
+    columns=[
+        'pca_1',
+        'pca_2',
+        'pca_3',
+        'pca_4',
+        'pca_5',
+    ]
 )
+pca_df.to_csv('data-pca.csv')
 

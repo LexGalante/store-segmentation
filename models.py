@@ -15,11 +15,17 @@ from sklearn.metrics import (classification_report,
                              confusion_matrix,
                              accuracy_score)
 
+if os.path.exists('./results'):
+    rmtree('./results')
+    
+os.mkdir('./results')
+
 df = pd.read_csv('data.csv')
+df_pca = pd.read_csv('data-pca.csv')
 # separação dos dados de treino e teste
 X = df.drop('club', axis=1)
+X_PCA = df_pca
 Y = df['club']
-X_train, x_test, Y_train, y_test = train_test_split(X, Y, test_size=0.2)
 # aqui estamos experimentando várias parametrizacões
 models = {
     # regressão logistica
@@ -95,33 +101,33 @@ models = {
     )
 }
 results = {}
-if os.path.exists('./results'):
-    rmtree('./results')
+def build_models(X, Y, sufix_model_name: str = ""):
+    X_train, x_test, Y_train, y_test = train_test_split(X, Y, test_size=0.2)
+    # predições
+    for index, (name, model) in enumerate(models.items()):
+        try:
+            name = name + sufix_model_name
+            print(f"{index} - Training model {name} ...")
+            model.fit(X_train, Y_train)
+            predicts = model.predict(x_test)
+            accuracy = round(accuracy_score(y_test, predicts) * 100, 2)
+            print(f"{index} - Model {name} trained, accuracy {accuracy}")
+            results[name] = {
+                'accuracy_score': accuracy,
+                'confusion_matrix': confusion_matrix(y_test, predicts),
+                'classification_report': classification_report(y_test, predicts),
+            }
+            print(name)
+            print(results[name]['confusion_matrix'])
+            print(f"{index} - Dumping model {name} ...")
+            dump(model, f"./dumps/{name}.joblib")
+            print(f"{index} - Saving model {name} ...")
+            with open(f"./results/{name}_{results[name]['accuracy_score']}.txt", 'w') as file:
+                file.write(results[name]['classification_report'])
+        except Exception as e:
+            print(f"Error on trying to training model {name}: {str(e)}")
     
-os.mkdir('./results')
-# predições
-for index, (name, model) in enumerate(models.items()):
-    try:
-        print(f"{index} - Training model {name} ...")
-        model.fit(X_train, Y_train)
-        predicts = model.predict(x_test)
-        accuracy = round(accuracy_score(y_test, predicts) * 100, 2)
-        print(f"{index} - Model {name} trained, accuracy {accuracy}")
-        results[name] = {
-            'accuracy_score': accuracy,
-            'confusion_matrix': confusion_matrix(y_test, predicts),
-            'classification_report': classification_report(y_test, predicts),
-        }
-        print(name)
-        print(results[name]['confusion_matrix'])
-        print(f"{index} - Dumping model {name} ...")
-        dump(model, f"./dumps/{name}.joblib")
-        print(f"{index} - Saving model {name} ...")
-        with open(f"./results/{name}_{results[name]['accuracy_score']}.txt", 'w') as file:
-            file.write(results[name]['classification_report'])
-    except Exception as e:
-        print(f"Error on trying to training model {name}: {str(e)}")
 
-
-
+build_models(X, Y)
+build_models(X, Y, "_pca")
 
