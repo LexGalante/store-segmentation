@@ -3,7 +3,7 @@
 import numpy as np
 import pandas as pd
 
-from utils.helpers import handle_boolean, handle_nan_float, handle_number_of_employees
+from helpers import handle_boolean, handle_nan_float, handle_number_of_employees
 
 # importando os dados do dataset
 df = pd.read_csv('stores.csv', sep=',')

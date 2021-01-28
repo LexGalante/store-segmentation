@@ -2,9 +2,11 @@
 """
 Funcões auxiliares para o projeto
 """
+import os
 import numpy as np
 import pandas as pd
 from typing import Any
+from shutil import rmtree
 
 
 def handle_boolean(input: str, default: int = 0) -> int:
@@ -72,4 +74,9 @@ def clean_dataset(df):
     df.dropna(inplace=True)
     indices_to_keep = ~df.isin([np.nan, np.inf, -np.inf]).any(1)
     return df[indices_to_keep].astype(np.float64)
+
+def clean_directory(dir_name):
+    if os.path.exists(dir_name):
+        rmtree(dir_name)
+    os.mkdir(dir_name)
 
