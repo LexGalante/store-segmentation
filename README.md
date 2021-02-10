@@ -25,3 +25,10 @@ O dataset princial está localizado [aqui](https://github.com/LexGalante/store-s
 - [__sistema_6__] - se essa loja usa o sistema 6 tem o valor *"S"*, caso não venda tem o valor *"N"*.
 - [__faturamento_ultimo_ano__] - qual foi o valor do faturamento do ultimo dessa loja.
 - [__maturidade_processo__] - qual nivel de maturidade de processa de vendas dessa loja.
+
+# Preparação de dados
+Para preparar os dados para os modelos várias técnicas foram utilizadas, para preparar o dataset com todas estas tranformações basta executar o arquivo *transform.py*
+
+# PCA
+Para melhorar a performance de alguns modelos utilizamos o [PCA(Principal Component Analysis)](https://pt.wikipedia.org/wiki/An%C3%A1lise_de_componentes_principais)
+Para gerar o dataset basta executar o arquivo *pca.py*
