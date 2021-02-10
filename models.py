@@ -4,7 +4,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.naive_bayes import MultinomialNB, GaussianNB
 from sklearn.svm import SVC
-from sklearn.neural_network import MLPClassifier
+from tensorflow import keras, nn
 
 
 def get_models():
@@ -64,20 +64,32 @@ def get_models():
         'naive_bayes_1': GaussianNB(),
         'naive_bayes_2': MultinomialNB(),
         # maquinas de suporte de vetores
-        'svm_1': SVC(),
+        'svm_1': SVC(C=100),
         'svm_2': SVC(
+            C=100,
             kernel='poly',
+            degree=7
         ),
         'svm_3': SVC(
+            C=100,
             kernel='sigmoid',
         ),
         # rede neural
-        'neural_network_1': MLPClassifier(),
-        'neural_network_2': MLPClassifier(
-            activation='relu',
-            solver='adam',
-            learning_rate='constant',
-            max_iter=1000,
-            random_state=100
-        )
+        'neural_network_1': keras.Sequential([
+            keras.layers.Dense(80, activation=nn.sigmoid),
+            keras.layers.Dropout(0.1),
+            keras.layers.Dense(160, activation=nn.sigmoid),
+            keras.layers.Dropout(0.1),
+            keras.layers.Dense(160, activation=nn.sigmoid),
+            keras.layers.Dropout(0.1),
+            keras.layers.Dense(80, activation=nn.sigmoid),
+            keras.layers.Dropout(0.1),
+            keras.layers.Dense(40, activation=nn.sigmoid),
+            keras.layers.Dropout(0.1),
+            keras.layers.Dense(20, activation=nn.sigmoid),
+            keras.layers.Dropout(0.1),
+            keras.layers.Dense(10, activation=nn.sigmoid),
+            keras.layers.Dropout(0.1),
+            keras.layers.Dense(4, activation=nn.softmax)
+        ])
     }

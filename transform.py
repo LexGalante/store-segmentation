@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
-
 import numpy as np
 import pandas as pd
 
-from helpers import handle_boolean, handle_nan_float, handle_number_of_employees
+from helpers import (
+    handle_boolean,
+    handle_nan_float,
+    handle_number_of_employees,
+    admensionality
+)
 
 # importando os dados do dataset
 df = pd.read_csv('stores.csv', sep=',')
@@ -88,6 +92,8 @@ df = pd.concat([
 # veja mais detalhes em https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.fillna.html
 # para o aporte_inicial vamos considerar 0
 df['aporte_inicial'] = df['aporte_inicial'].apply(handle_nan_float)
+# para as redes neurais/svm traremos as escalas desses valores para numéros entre -1 e 1
+df['aporte_inicial'] = admensionality(df['aporte_inicial'], min(df['aporte_inicial']), max(df['aporte_inicial']))
 # para o numero de empregados vamos considerar a média do clube que ele pertence
 # print(df.groupby('club').mean()['numero_empregados'])
 # BRONZE      18.617430
@@ -95,6 +101,8 @@ df['aporte_inicial'] = df['aporte_inicial'].apply(handle_nan_float)
 # OURO        11.478423
 # PRATA        6.571642
 df['numero_empregados'] = df[['numero_empregados', 'club']].apply(handle_number_of_employees, axis=1)
+# para as redes neurais/svm traremos as escalas desses valores para numéros entre -1 e 1
+df['numero_empregados'] = admensionality(df['numero_empregados'], min(df['numero_empregados']), max(df['numero_empregados']))
 # vamos remover as colunas que passaram pelo processo de dummie
 df = df.drop([
     'loja',
@@ -107,4 +115,4 @@ df = df.drop([
     'regiao',
 ], axis=1)
 # agora vamos salvar nosso dataframe final para construcao dos modelos
-df.to_csv('data.csv')
+df.to_csv('data.csv', index=False)

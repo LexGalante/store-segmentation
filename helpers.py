@@ -40,6 +40,17 @@ def handle_club(input: str) -> int:
         return 4
     
     raise ValueError(f"Club ({input}) desconhecido, verifique")
+    
+def unlabel_club(v):
+    if v == 0:
+        out = 'BRONZE'
+    elif v == 1:
+        out = 'DIAMENTE'
+    elif v == 2:
+        out = 'OURO'
+    else:
+        out = 'PRATA'
+    return out
 
 
 def handle_number_of_employees(cols: list):
@@ -79,4 +90,11 @@ def clean_directory(dir_name):
     if os.path.exists(dir_name):
         rmtree(dir_name)
     os.mkdir(dir_name)
+    
+def admensionality(x, minv, maxv):
+    """ 
+    Funcao para reducao da dimensionalidade de um valor
+    """
+    out = (x-minv)/(maxv-minv)
+    return out
 
